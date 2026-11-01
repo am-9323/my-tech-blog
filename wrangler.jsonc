@@ -3,5 +3,10 @@
   "compatibility_date": "2026-11-01", // デプロイする日に更新してください
   "assets": {
     "directory": "./dist",
-  }
+  },
+ 	"routes": [
+		{ "pattern": "tech-blog.am9323.com", "custom_domain": true }
+	],
+	"workers_dev": false,
+	"preview_urls": true
 }
