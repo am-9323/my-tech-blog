@@ -1,5 +1,5 @@
 {
-  "name": "my-astro-app",
+  "name": "my-tech-blog",
   "compatibility_date": "2026-11-01", // デプロイする日に更新してください
   "assets": {
     "directory": "./dist",
