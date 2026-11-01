@@ -3,6 +3,7 @@
   "compatibility_date": "2026-11-01", // デプロイする日に更新してください
   "assets": {
     "directory": "./dist",
+    "not_found_handling": "404-page",
   },
  	"routes": [
 		{ "pattern": "tech-blog.am9323.com", "custom_domain": true }

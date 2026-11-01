@@ -1,0 +1,37 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="ページが見つかりません">
+  <div class="not-found">
+    <p class="code">404</p>
+    <h1>ページが見つかりません</h1>
+    <p>お探しのページは、移動または削除された可能性があります。</p>
+    <ul>
+      <li><a href="/">トップへ戻る</a></li>
+      <li><a href="/blog/">記事一覧を見る</a></li>
+    </ul>
+  </div>
+</BaseLayout>
+
+<style>
+  .not-found {
+    text-align: center;
+  }
+  .code {
+    margin: 0;
+    font-size: 4rem;
+    font-weight: bold;
+    color: var(--muted);
+  }
+  h1 {
+    margin-top: 0;
+  }
+  ul {
+    display: flex;
+    gap: 1.5rem;
+    justify-content: center;
+    padding: 0;
+    list-style: none;
+  }
+</style>
