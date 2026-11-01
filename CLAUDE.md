@@ -1,0 +1,19 @@
+@AGENTS.md
+
+## 基本
+- パッケージマネージャーは pnpm（例: `pnpm astro dev --background`）
+- テスト・lint はない。変更後は `pnpm build` が通ることを確認する
+- 記事の追加方法・slug・frontmatter のルールは README.md を参照
+
+## 注意点
+- 記事は `src/content/blog/<slug>/index.md` のみ読み込まれる
+- 公開済み記事の slug は変更しない（URL が変わるため）
+- 記事一覧は `getCollection` ではなく `src/lib/posts.ts` の `getPosts()` を使う（下書き除外・並び替え込み）
+- 日付表示は `formatDate()` を使う（UTC→JST 変換）
+
+## デプロイ
+- Cloudflare の Git 連携で自動デプロイされる。手動でデプロイしない
+
+## 慣習
+- コメントは日本語
+- コミットメッセージは `add: …` / `fix: …`（日本語）
