@@ -5,6 +5,7 @@ import TableOfContents from '../components/TableOfContents.astro';
 import TagList from '../components/TagList.astro';
 import { formatDate, type Post } from '../lib/posts';
 import BaseLayout from './BaseLayout.astro';
+import '../styles/post-content.css';
 
 interface Props {
   post: Post;
@@ -49,10 +50,5 @@ const { title, description, pubDate, updatedDate, tags, heroImage } = post.data;
   .meta {
     color: var(--muted);
     font-size: 0.875rem;
-  }
-  .content :global(h2) {
-    margin-top: 2.5rem;
-    padding-bottom: 0.25rem;
-    border-bottom: 1px solid var(--border);
   }
 </style>

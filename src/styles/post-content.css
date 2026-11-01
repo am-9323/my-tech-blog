@@ -1,0 +1,27 @@
+/* 記事本文（Markdown から生成される要素）のスタイル */
+
+.content h2 {
+  margin-top: 2.5rem;
+  padding-bottom: 0.25rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.content table {
+  display: block;
+  overflow-x: auto;
+  width: max-content;
+  max-width: 100%;
+  margin: 1.5rem 0;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+.content th,
+.content td {
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--border);
+  vertical-align: top;
+}
+.content th {
+  background: color-mix(in srgb, var(--border) 40%, transparent);
+  white-space: nowrap;
+}
