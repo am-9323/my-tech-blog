@@ -1,4 +1,4 @@
-# My Tech Blog
+# My Little Commits
 
 Astro と Content Collections で作った個人の技術ブログです。
 
