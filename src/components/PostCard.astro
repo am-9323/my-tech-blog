@@ -1,0 +1,48 @@
+---
+import { formatDate, type Post } from '../lib/posts';
+import TagList from './TagList.astro';
+
+interface Props {
+  post: Post;
+}
+
+const { post } = Astro.props;
+const { title, description, pubDate, tags, draft } = post.data;
+---
+
+<article>
+  <h2>
+    <a href={`/blog/${post.id}/`}>{title}</a>
+    {draft && <span class="draft">下書き</span>}
+  </h2>
+  <time datetime={pubDate.toISOString()}>{formatDate(pubDate)}</time>
+  <p>{description}</p>
+  <TagList tags={tags} />
+</article>
+
+<style>
+  article {
+    padding: 1.25rem 0;
+    border-bottom: 1px solid var(--border);
+  }
+  h2 {
+    margin: 0;
+    font-size: 1.25rem;
+  }
+  time {
+    color: var(--muted);
+    font-size: 0.875rem;
+  }
+  p {
+    margin: 0.25rem 0 0.5rem;
+  }
+  .draft {
+    margin-left: 0.5rem;
+    padding: 0 0.4em;
+    font-size: 0.75rem;
+    border: 1px solid var(--muted);
+    border-radius: 4px;
+    color: var(--muted);
+    vertical-align: middle;
+  }
+</style>

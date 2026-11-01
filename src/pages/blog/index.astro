@@ -1,0 +1,12 @@
+---
+import PostCard from '../../components/PostCard.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getPosts } from '../../lib/posts';
+
+const posts = await getPosts();
+---
+
+<BaseLayout title="記事一覧">
+  <h1>記事一覧</h1>
+  {posts.map((post) => <PostCard post={post} />)}
+</BaseLayout>

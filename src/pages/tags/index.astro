@@ -1,0 +1,19 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getPosts, groupByTag } from '../../lib/posts';
+
+const tags = groupByTag(await getPosts());
+---
+
+<BaseLayout title="タグ一覧">
+  <h1>タグ一覧</h1>
+  <ul>
+    {
+      [...tags].map(([tag, posts]) => (
+        <li>
+          <a href={`/tags/${tag}/`}>#{tag}</a> ({posts.length})
+        </li>
+      ))
+    }
+  </ul>
+</BaseLayout>

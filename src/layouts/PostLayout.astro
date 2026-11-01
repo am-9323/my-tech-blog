@@ -1,0 +1,58 @@
+---
+import type { MarkdownHeading } from 'astro';
+import { Image } from 'astro:assets';
+import TableOfContents from '../components/TableOfContents.astro';
+import TagList from '../components/TagList.astro';
+import { formatDate, type Post } from '../lib/posts';
+import BaseLayout from './BaseLayout.astro';
+
+interface Props {
+  post: Post;
+  headings: MarkdownHeading[];
+}
+
+const { post, headings } = Astro.props;
+const { title, description, pubDate, updatedDate, tags, heroImage } = post.data;
+---
+
+<BaseLayout title={title} description={description}>
+  <article>
+    {heroImage && <Image src={heroImage} alt="" class="hero" loading="eager" />}
+    <h1>{title}</h1>
+    <div class="meta">
+      <time datetime={pubDate.toISOString()}>{formatDate(pubDate)}</time>
+      {
+        updatedDate && (
+          <span>
+            （更新: <time datetime={updatedDate.toISOString()}>{formatDate(updatedDate)}</time>）
+          </span>
+        )
+      }
+    </div>
+    <TagList tags={tags} />
+    <TableOfContents headings={headings} />
+    <div class="content">
+      <slot />
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .hero {
+    width: 100%;
+    border-radius: 8px;
+  }
+  h1 {
+    margin: 1rem 0 0.25rem;
+    line-height: 1.4;
+  }
+  .meta {
+    color: var(--muted);
+    font-size: 0.875rem;
+  }
+  .content :global(h2) {
+    margin-top: 2.5rem;
+    padding-bottom: 0.25rem;
+    border-bottom: 1px solid var(--border);
+  }
+</style>
