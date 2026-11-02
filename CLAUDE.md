@@ -1,8 +1,9 @@
 @AGENTS.md
 
 ## 基本
-- パッケージマネージャーは pnpm（例: `pnpm astro dev --background`）
+- パッケージマネージャーは pnpm（例: `pnpm build`）
 - テスト・lint はない。変更後は `pnpm build` が通ることを確認する
+- 開発サーバーは起動しない（AGENTS.md の記載より優先）。表示の確認は `pnpm build` の出力（`dist/`）で行い、ブラウザでの確認はユーザーに依頼する
 - 記事の追加方法・slug・frontmatter のルールは README.md を参照
 
 ## 注意点

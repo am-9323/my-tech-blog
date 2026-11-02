@@ -1,7 +1,7 @@
 ---
 import type { MarkdownHeading } from 'astro';
 import { Image } from 'astro:assets';
-import TableOfContents from '../components/TableOfContents.astro';
+import TableOfContents from '../components/TableOfContents';
 import TagList from '../components/TagList.astro';
 import { formatDate, type Post } from '../lib/posts';
 import BaseLayout from './BaseLayout.astro';
@@ -16,39 +16,100 @@ const { post, headings } = Astro.props;
 const { title, description, pubDate, updatedDate, tags, heroImage } = post.data;
 ---
 
-<BaseLayout title={title} description={description}>
-  <article>
-    {heroImage && <Image src={heroImage} alt="" class="hero" loading="eager" />}
-    <h1>{title}</h1>
-    <div class="meta">
-      <time datetime={pubDate.toISOString()}>{formatDate(pubDate)}</time>
-      {
-        updatedDate && (
-          <span>
-            （更新: <time datetime={updatedDate.toISOString()}>{formatDate(updatedDate)}</time>）
-          </span>
-        )
-      }
-    </div>
-    <TagList tags={tags} />
-    <TableOfContents headings={headings} />
-    <div class="content">
-      <slot />
-    </div>
-  </article>
+<BaseLayout title={title} description={description} wide>
+  <div class="post-layout">
+    <header class="post-header">
+      <h1>{title}</h1>
+      <div class="meta">
+        <time datetime={pubDate.toISOString()}>{formatDate(pubDate)}</time>
+        {
+          updatedDate && (
+            <span>
+              （更新: <time datetime={updatedDate.toISOString()}>{formatDate(updatedDate)}</time>）
+            </span>
+          )
+        }
+      </div>
+      <TagList tags={tags} />
+    </header>
+    <article class="post-body">
+      {heroImage && <Image src={heroImage} alt="" class="hero" loading="eager" />}
+      <div class="content">
+        <slot />
+      </div>
+    </article>
+    <aside class="sidebar">
+      <TableOfContents client:load headings={headings} />
+    </aside>
+  </div>
 </BaseLayout>
 
 <style>
-  .hero {
-    width: 100%;
-    border-radius: 8px;
+  .post-header {
+    grid-area: header;
+    margin-bottom: 0.5rem;
   }
   h1 {
-    margin: 1rem 0 0.25rem;
-    line-height: 1.4;
+    margin: 0 0 0.75rem;
+    font-size: clamp(1.5rem, 4vw, 2rem);
+    line-height: 1.5;
+    /* 日本語を単語（文節）の途中で折り返さない（対応ブラウザのみ） */
+    word-break: auto-phrase;
+    /* 最終行が極端に短くならないように折り返す */
+    text-wrap: pretty;
   }
   .meta {
+    margin-bottom: 1rem;
     color: var(--muted);
     font-size: 0.875rem;
+  }
+
+  /*
+   * スマホでは1カラム（ヘッダー → 目次 → 本文）、
+   * PCでは本文の右に目次を置き、ヘッダーは本文と同じ幅にそろえる
+   */
+  .post-layout {
+    display: grid;
+    grid-template-areas:
+      'header'
+      'sidebar'
+      'body';
+    gap: 1.5rem;
+  }
+  .sidebar {
+    grid-area: sidebar;
+  }
+  @media (min-width: 64rem) {
+    .post-layout {
+      grid-template-areas:
+        'header .'
+        'body sidebar';
+      grid-template-columns: minmax(0, 1fr) 17.5rem;
+      align-items: start;
+    }
+    .sidebar {
+      position: sticky;
+      top: 1.5rem;
+    }
+  }
+
+  .post-body {
+    grid-area: body;
+    min-width: 0;
+    padding: 1.75rem 1.25rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+  }
+  @media (min-width: 40rem) {
+    .post-body {
+      padding: 2.5rem 3rem;
+    }
+  }
+  .hero {
+    display: block;
+    width: 100%;
+    margin-bottom: 2rem;
+    border-radius: 4px;
   }
 </style>

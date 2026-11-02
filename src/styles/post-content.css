@@ -1,19 +1,92 @@
 /* 記事本文（Markdown から生成される要素）のスタイル */
 
-.content h2 {
-  margin-top: 2.5rem;
-  padding-bottom: 0.25rem;
-  border-bottom: 1px solid var(--border);
+.content {
+  line-height: 1.9;
+  overflow-wrap: break-word;
+}
+.content > :first-child {
+  margin-top: 0;
 }
 
+/* 段落・ブロック要素の間隔 */
+.content p,
+.content ul,
+.content ol,
+.content blockquote,
+.content table {
+  margin: 1.25rem 0;
+}
+
+/* 見出し */
+.content h2,
+.content h3,
+.content h4 {
+  line-height: 1.5;
+  scroll-margin-top: 1.5rem;
+}
+.content h2 {
+  margin: 3rem 0 1.25rem;
+  padding-bottom: 0.4rem;
+  font-size: 1.5rem;
+  border-bottom: 1px solid var(--border);
+}
+.content h3 {
+  margin: 2.25rem 0 1rem;
+  font-size: 1.25rem;
+}
+.content h4 {
+  margin: 1.75rem 0 0.75rem;
+  font-size: 1.0625rem;
+}
+
+.content a {
+  text-underline-offset: 0.2em;
+}
+
+/* リスト */
+.content ul,
+.content ol {
+  padding-left: 1.5em;
+}
+.content li + li {
+  margin-top: 0.25em;
+}
+.content li > ul,
+.content li > ol {
+  margin: 0.25em 0 0;
+}
+.content .contains-task-list {
+  padding-left: 0.25em;
+  list-style: none;
+}
+.content .task-list-item input {
+  margin: 0 0.5em 0 0;
+}
+
+/* 引用 */
+.content blockquote {
+  margin-left: 0;
+  margin-right: 0;
+  padding: 0.25rem 1rem;
+  border-left: 4px solid var(--border);
+  color: var(--muted);
+}
+.content blockquote > :first-child {
+  margin-top: 0;
+}
+.content blockquote > :last-child {
+  margin-bottom: 0;
+}
+
+/* 表 */
 .content table {
   display: block;
   overflow-x: auto;
   width: max-content;
   max-width: 100%;
-  margin: 1.5rem 0;
   border-collapse: collapse;
   font-size: 0.9rem;
+  line-height: 1.6;
 }
 .content th,
 .content td {
@@ -22,6 +95,42 @@
   vertical-align: top;
 }
 .content th {
-  background: color-mix(in srgb, var(--border) 40%, transparent);
+  background: var(--code-bg);
+  white-space: nowrap;
+}
+
+/* 画像 */
+.content img {
+  display: block;
+  margin: 1.5rem auto;
+  border-radius: 6px;
+}
+
+/* 水平線 */
+.content hr {
+  margin: 2.5rem 0;
+  border: none;
+  border-top: 1px solid var(--border);
+}
+
+/* コードブロック（Expressive Code） */
+.content .expressive-code {
+  margin: 1.5rem 0;
+}
+
+/* 脚注 */
+.content .footnotes {
+  margin-top: 3rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border);
+  color: var(--muted);
+  font-size: 0.875rem;
+}
+.content .sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
   white-space: nowrap;
 }

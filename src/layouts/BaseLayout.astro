@@ -4,9 +4,11 @@ import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 interface Props {
   title?: string;
   description?: string;
+  /** 記事ページなど、2カラムで横幅を広く使うページで true にする */
+  wide?: boolean;
 }
 
-const { title, description = SITE_DESCRIPTION } = Astro.props;
+const { title, description = SITE_DESCRIPTION, wide = false } = Astro.props;
 const pageTitle = title ? `${title} | ${SITE_TITLE}` : SITE_TITLE;
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 ---
@@ -30,53 +32,73 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     <meta property="og:site_name" content={SITE_TITLE} />
   </head>
   <body>
-    <header>
-      <a href="/" class="site-title">{SITE_TITLE}</a>
-      <nav>
-        <a href="/blog/">Blog</a>
-        <a href="/tags/">Tags</a>
-        <a href="/rss.xml">RSS</a>
-      </nav>
+    <header class="site-header">
+      <div class="container">
+        <a href="/" class="site-title">{SITE_TITLE}</a>
+        <nav>
+          <a href="/blog/">Blog</a>
+          <a href="/tags/">Tags</a>
+          <a href="/rss.xml">RSS</a>
+        </nav>
+      </div>
     </header>
-    <main>
+    <main class:list={['container', { narrow: !wide }]}>
       <slot />
     </main>
-    <footer>
+    <footer class="site-footer">
       <small>&copy; {new Date().getFullYear()} {SITE_TITLE}</small>
     </footer>
   </body>
 </html>
 
 <style is:global>
+  /* テーマ（配色・サイズ）。各ページ・コンポーネントはこの変数を使う */
   :root {
-    --fg: #1f2328;
-    --muted: #656d76;
-    --bg: #ffffff;
-    --border: #d0d7de;
-    --accent: #0969da;
-    --code-bg: #f6f8fa;
+    --bg: #eef2f2;
+    --surface: #ffffff;
+    --fg: #1f2933;
+    --muted: #5c6c70;
+    --border: #d5dfe0;
+    --accent: #3b7a80;
+    --accent-soft: color-mix(in srgb, var(--accent) 12%, transparent);
+    --code-bg: #edf2f2;
+
+    --radius: 6px;
+    --container: 72rem;
+    --container-narrow: 48rem;
+    --font-sans: system-ui, -apple-system, 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Noto Sans JP',
+      sans-serif;
+    --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   }
   @media (prefers-color-scheme: dark) {
     :root {
-      --fg: #e6edf3;
-      --muted: #8d96a0;
-      --bg: #0d1117;
-      --border: #30363d;
-      --accent: #4493f8;
-      --code-bg: #161b22;
+      --bg: #0f1416;
+      --surface: #171e21;
+      --fg: #e3e8ea;
+      --muted: #8d9da1;
+      --border: #2a3538;
+      --accent: #7fb3b8;
+      --code-bg: #222b2e;
     }
   }
   * {
     box-sizing: border-box;
   }
+  html {
+    scroll-behavior: smooth;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
   body {
-    margin: 0 auto;
-    max-width: 48rem;
-    padding: 0 1rem;
+    margin: 0;
     color: var(--fg);
     background: var(--bg);
-    font-family: system-ui, -apple-system, 'Hiragino Sans', 'Noto Sans JP', sans-serif;
+    font-family: var(--font-sans);
     line-height: 1.8;
+    -webkit-font-smoothing: antialiased;
   }
   a {
     color: var(--accent);
@@ -85,28 +107,40 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     max-width: 100%;
     height: auto;
   }
-  pre {
-    padding: 1rem;
-    overflow-x: auto;
-    border-radius: 6px;
-    line-height: 1.5;
+  code,
+  kbd {
+    font-family: var(--font-mono);
   }
   :not(pre) > code {
-    padding: 0.1em 0.4em;
+    padding: 0.15em 0.4em;
+    font-size: 0.875em;
     background: var(--code-bg);
     border-radius: 4px;
+  }
+  .container {
+    width: 100%;
+    max-width: var(--container);
+    margin: 0 auto;
+    padding: 0 1rem;
+  }
+  .container.narrow {
+    max-width: var(--container-narrow);
   }
 </style>
 
 <style>
-  header {
+  .site-header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+  }
+  .site-header .container {
     display: flex;
     flex-wrap: wrap;
     gap: 0.5rem 1.5rem;
-    align-items: baseline;
+    align-items: center;
     justify-content: space-between;
-    padding: 1.5rem 0;
-    border-bottom: 1px solid var(--border);
+    padding-top: 0.875rem;
+    padding-bottom: 0.875rem;
   }
   .site-title {
     font-weight: bold;
@@ -116,13 +150,23 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
   }
   nav {
     display: flex;
-    gap: 1rem;
+    gap: 1.25rem;
+    font-size: 0.9375rem;
+  }
+  nav a {
+    color: var(--muted);
+    text-decoration: none;
+  }
+  nav a:hover {
+    color: var(--fg);
   }
   main {
-    padding: 2rem 0;
+    padding-top: 2.5rem;
+    padding-bottom: 3rem;
   }
-  footer {
-    padding: 2rem 0;
+  .site-footer {
+    padding: 2rem 1rem;
+    background: var(--surface);
     border-top: 1px solid var(--border);
     color: var(--muted);
     text-align: center;

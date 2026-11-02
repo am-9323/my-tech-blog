@@ -26,6 +26,19 @@ const { tags } = Astro.props;
     margin: 0;
     padding: 0;
     list-style: none;
-    font-size: 0.875rem;
+    font-size: 0.8125rem;
+  }
+  a {
+    display: inline-block;
+    padding: 0.15rem 0.75rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    color: var(--fg);
+    text-decoration: none;
+  }
+  a:hover {
+    border-color: var(--accent);
+    color: var(--accent);
   }
 </style>

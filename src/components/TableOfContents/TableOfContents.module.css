@@ -1,0 +1,42 @@
+.toc {
+  padding: 1.25rem 1.25rem 1rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
+@media (min-width: 64rem) {
+  .toc {
+    max-height: calc(100vh - 3rem);
+    overflow-y: auto;
+  }
+}
+.title {
+  margin: 0 0 0.75rem;
+  font-weight: bold;
+}
+.list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.list a {
+  display: block;
+  padding: 0.3rem 0 0.3rem 0.875rem;
+  border-left: 2px solid var(--border);
+  color: var(--muted);
+  text-decoration: none;
+}
+.list a:hover {
+  color: var(--fg);
+}
+.list a[aria-current='true'] {
+  border-left-color: var(--accent);
+  color: var(--fg);
+  font-weight: bold;
+}
+.depth3 a {
+  padding-left: 1.75rem;
+  font-size: 0.8125rem;
+}
