@@ -2,7 +2,8 @@
 
 ## 基本
 - パッケージマネージャーは pnpm（例: `pnpm build`）
-- テスト・lint はない。変更後は `pnpm build` が通ることを確認する
+- 変更後は `pnpm check`（型チェック・frontmatter 検証）と `pnpm build` が通ることを確認する
+- CI（`.github/workflows/ci.yml`）で `pnpm check` → `pnpm build` → `pnpm check:dist`（下書き混入・必須ファイルの検査）を実行している
 - 開発サーバーは起動しない（AGENTS.md の記載より優先）。表示の確認は `pnpm build` の出力（`dist/`）で行い、ブラウザでの確認はユーザーに依頼する
 - 記事の追加方法・slug・frontmatter のルールは README.md を参照
 
@@ -18,3 +19,4 @@
 ## 慣習
 - コメントは日本語
 - コミットメッセージは `add: …` / `fix: …`（日本語）
+- コミット・push は必ずユーザーの許可を取ってから行う。以前に許可を得ていても、新しい変更ごとに改めて確認する
