@@ -1,5 +1,6 @@
 ---
 import PostCard from '../components/PostCard.astro';
+import ProfileCard from '../components/ProfileCard.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { getPosts } from '../lib/posts';
 
@@ -7,8 +8,40 @@ const LATEST_COUNT = 5;
 const posts = (await getPosts()).slice(0, LATEST_COUNT);
 ---
 
-<BaseLayout>
-  <h1>新着記事</h1>
-  {posts.map((post) => <PostCard post={post} />)}
-  <p><a href="/blog/">記事一覧へ →</a></p>
+<BaseLayout wide>
+  <div class="home-layout">
+    <section class="latest">
+      <h1>新着記事</h1>
+      {posts.map((post) => <PostCard post={post} />)}
+      <p><a href="/blog/">記事一覧へ →</a></p>
+    </section>
+    <aside class="sidebar">
+      <ProfileCard />
+    </aside>
+  </div>
 </BaseLayout>
+
+<style>
+  /*
+   * スマホでは1カラム（記事一覧 → プロフィール）、
+   * PCでは記事ページと同じく、右側にサイドバーを置く
+   */
+  .home-layout {
+    display: grid;
+    gap: 1.5rem;
+  }
+  @media (min-width: 64rem) {
+    .home-layout {
+      grid-template-columns: minmax(0, 1fr) 17.5rem;
+      align-items: start;
+    }
+    .sidebar {
+      position: sticky;
+      top: 1.5rem;
+    }
+  }
+  h1 {
+    margin: 0 0 1rem;
+    font-size: 1.5rem;
+  }
+</style>

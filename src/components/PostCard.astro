@@ -10,36 +10,84 @@ const { post } = Astro.props;
 const { title, description, pubDate, tags, draft } = post.data;
 ---
 
-<article>
+<article class="card">
+  <time datetime={pubDate.toISOString()}>{formatDate(pubDate)}</time>
   <h2>
     <a href={`/blog/${post.id}/`}>{title}</a>
     {draft && <span class="draft">下書き</span>}
   </h2>
-  <time datetime={pubDate.toISOString()}>{formatDate(pubDate)}</time>
   <p>{description}</p>
-  <TagList tags={tags} />
+  <div class="tags">
+    <TagList tags={tags} />
+  </div>
 </article>
 
 <style>
-  article {
-    padding: 1.25rem 0;
-    border-bottom: 1px solid var(--border);
+  .card {
+    /* タイトルのリンクをカード全体に広げるための基準 */
+    position: relative;
+    margin-bottom: 1rem;
+    padding: 1.25rem 1.5rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    transition: border-color 0.15s;
   }
-  h2 {
-    margin: 0;
-    font-size: 1.25rem;
+  .card:hover {
+    border-color: var(--accent);
   }
   time {
     color: var(--muted);
-    font-size: 0.875rem;
+    font-size: 0.8125rem;
+  }
+  h2 {
+    margin: 0.25rem 0 0.5rem;
+    font-size: 1.1875rem;
+    line-height: 1.5;
+    word-break: auto-phrase;
+  }
+  h2 a {
+    color: var(--fg);
+    text-decoration: none;
+  }
+  /* カードのどこをクリックしても記事に飛べるよう、リンクの当たり判定をカード全体に広げる */
+  h2 a::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+  }
+  .card:hover h2 a {
+    color: var(--accent);
+  }
+  h2 a:focus-visible {
+    outline: none;
+  }
+  .card:has(h2 a:focus-visible) {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
   }
   p {
-    margin: 0.25rem 0 0.5rem;
+    /* 説明文は2行まで表示し、溢れた分は「…」で省略する */
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    margin: 0 0 0.75rem;
+    color: var(--muted);
+    font-size: 0.9375rem;
+    line-height: 1.7;
+  }
+  /* タグはカード全体のリンクより手前に置き、タグページへのリンクとして押せるようにする */
+  .tags {
+    position: relative;
+    z-index: 1;
+    width: fit-content;
   }
   .draft {
     margin-left: 0.5rem;
     padding: 0 0.4em;
     font-size: 0.75rem;
+    font-weight: normal;
     border: 1px solid var(--muted);
     border-radius: 4px;
     color: var(--muted);
