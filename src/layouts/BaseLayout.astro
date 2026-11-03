@@ -1,5 +1,7 @@
 ---
-import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
+import GitHubIcon from '../components/icons/GitHubIcon.astro';
+import RssIcon from '../components/icons/RssIcon.astro';
+import { AUTHOR, SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 
 interface Props {
   title?: string;
@@ -36,9 +38,14 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
       <div class="container">
         <a href="/" class="site-title">{SITE_TITLE}</a>
         <nav>
-          <a href="/blog/">Blog</a>
-          <a href="/tags/">Tags</a>
-          <a href="/rss.xml">RSS</a>
+          <a href="/blog/">記事一覧</a>
+          <a href="/tags/">タグ</a>
+          {/* 外部リンク・フィードはアイコンだけにして、ページへのリンクと区別する */}
+          <span class="icon-links">
+            <a href="/rss.xml" aria-label="RSS フィード" title="RSS フィード">
+              <RssIcon size={18} />
+            </a>
+          </span>
         </nav>
       </div>
     </header>
@@ -151,6 +158,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
   nav {
     display: flex;
     gap: 1.25rem;
+    align-items: center;
     font-size: 0.9375rem;
   }
   nav a {
@@ -159,6 +167,16 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
   }
   nav a:hover {
     color: var(--fg);
+  }
+  /* 文字のリンクとの間に区切り線を入れる */
+  .icon-links {
+    display: flex;
+    gap: 0.875rem;
+    padding-left: 1.25rem;
+    border-left: 1px solid var(--border);
+  }
+  .icon-links a {
+    display: flex;
   }
   main {
     padding-top: 2.5rem;
