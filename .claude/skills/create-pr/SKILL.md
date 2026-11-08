@@ -39,37 +39,30 @@ argument-hint: "[ブランチ名や PR の補足（任意）]"
 - `git push origin <ブランチ名>` を `allowed_domains: ["github.com"]` 付きで実行する
 - `-u` は付けない（sandbox で `.git/config` に書き込めず失敗する）
 
-## 5. PR 作成（ユーザーに実行してもらう）
+## 5. PR 作成
 
-`gh` は sandbox 内で証明書エラー（`x509: OSStatus -26276`）になり使えない。
+`gh` は sandbox の `excludedCommands` に入っており、sandbox の外で実行される。ただし**単独のコマンドとして実行したときだけ**で、`cd … &&` や `;`、パイプでつなぐと sandbox 内で実行され、ネットワークが拒否されて失敗する。そのため `gh` は常に単独で、`--repo am-9323/my-tech-blog` を付けて実行する。
 
 1. PR 本文を scratchpad ディレクトリの `pr-body.md` に書き出す
-2. 次のコマンドを、`--body-file` に絶対パスを入れた形で提示する
+2. 次のコマンドを実行する（`--body-file` は絶対パス）
 
    ```
-   gh pr create --base main --head <ブランチ名> --title "<タイトル>" --body-file <pr-body.md の絶対パス>
+   gh pr create --repo am-9323/my-tech-blog --base main --head <ブランチ名> --title "<タイトル>" --body-file <pr-body.md の絶対パス>
    ```
 
-3. 実行方法も添える：「入力欄が空の状態で `!` を手で1文字入力してから、コマンドを貼り付けて Enter」。`!` ごと貼り付けたり、先頭にスペースが入ったりすると、シェルで実行されずメッセージとして届く
-4. メッセージとして届いた場合は実行されていないので、上の方法を再度案内する
+3. 出力された PR の URL をユーザーに伝える
 
 ## 6. CI の結果確認
 
-PR の URL が返ってきたら、push したコミットのチェック結果を `curl` で GitHub API から取得する（`allowed_domains: ["api.github.com"]`）。
+次のコマンドを `run_in_background` で実行し、チェックが終わるまで待つ。
 
-```sh
-sha=$(git rev-parse HEAD)
-curl -s "https://api.github.com/repos/am-9323/my-tech-blog/commits/$sha/check-runs" | python3 -c '
-import json,sys
-d=json.load(sys.stdin)
-for r in d.get("check_runs",[]): print(r["name"], r["status"], r["conclusion"], r["html_url"])'
+```
+gh pr checks <PR番号> --repo am-9323/my-tech-blog --watch
 ```
 
 - チェックは2つある：GitHub Actions の `check` と、Cloudflare の `Workers Builds: my-tech-blog`
-- 両方が `completed` になるまで、上のコマンドを30秒間隔のループで `run_in_background` で回して待つ
-- ループ内でエラー出力を捨てない（`2>/dev/null` などで握りつぶすと、取得に失敗しても気づけずタイムアウトまで待ち続ける）
 - 結果は両方の成否を報告する
-- Cloudflare が失敗した場合、ログはダッシュボードでしか見られない。チェック結果に含まれるビルドページの URL を示し、ユーザーにログを貼ってもらう
+- Cloudflare が失敗した場合、ログはダッシュボードでしか見られない。出力に含まれるビルドページの URL を示し、ユーザーにログを貼ってもらう
 
 ## 失敗したときの修正
 
