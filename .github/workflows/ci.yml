@@ -15,7 +15,7 @@ jobs:
       - name: pnpm のセットアップ
         uses: pnpm/action-setup@v4
       - name: Node.js のセットアップ
-        uses: actions/setup-node@v5
+        uses: actions/setup-node@v7
         with:
           node-version: lts/*
           cache: pnpm
