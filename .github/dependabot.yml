@@ -1,0 +1,27 @@
+# Dependabot の設定
+# 毎週木曜に更新を確認し、patch / minor は1つの PR にまとめる（major は個別の PR）。
+# patch / minor は dependabot-automerge.yml が CI 通過後に自動マージする。
+# 残った PR（CI 失敗・major）は金曜の定期実行タスク（Claude）が調査して PR にコメントする。
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+      day: thursday
+      time: "09:00"
+      timezone: Asia/Tokyo
+    groups:
+      npm-minor-patch:
+        update-types: [minor, patch]
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+      day: thursday
+      time: "09:00"
+      timezone: Asia/Tokyo
+    groups:
+      actions-minor-patch:
+        update-types: [minor, patch]

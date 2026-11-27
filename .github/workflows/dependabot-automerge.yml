@@ -1,0 +1,30 @@
+name: Dependabot auto-merge
+
+# Dependabot の PR のうち patch / minor の更新に auto-merge を予約する。
+# 実際のマージは、ブランチ保護で必須にした CI（check）が通ったときに GitHub が行う。
+# major の更新と CI が落ちた PR は残り、金曜の定期実行タスクが調査する。
+on: pull_request
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  automerge:
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.user.login == 'dependabot[bot]'
+    steps:
+      - name: 更新内容の取得
+        id: metadata
+        uses: dependabot/fetch-metadata@v2
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+      # グループ化された PR では、含まれる更新のうち最も大きい種類が返る
+      - name: auto-merge の予約（patch / minor のみ）
+        if: >-
+          steps.metadata.outputs.update-type == 'version-update:semver-patch' ||
+          steps.metadata.outputs.update-type == 'version-update:semver-minor'
+        run: gh pr merge --auto --merge "$PR_URL"
+        env:
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
