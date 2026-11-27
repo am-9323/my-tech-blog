@@ -16,19 +16,19 @@
     "astro": "astro"
   },
   "dependencies": {
-    "@astrojs/react": "^7.1.2",
+    "@astrojs/react": "^7.1.9",
     "@astrojs/rss": "^4.0.19",
-    "@astrojs/sitemap": "^3.7.4",
-    "@types/react": "^19.3.0",
+    "@astrojs/sitemap": "^3.7.6",
+    "@types/react": "^19.3.1",
     "@types/react-dom": "^19.3.0",
-    "astro": "^7.4.4",
-    "astro-expressive-code": "^0.44.3",
+    "astro": "^7.4.13",
+    "astro-expressive-code": "^0.44.4",
     "react": "^19.3.1",
     "react-dom": "^19.3.1"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.12",
     "typescript": "^6.0.3",
-    "wrangler": "^4.156.0"
+    "wrangler": "^4.168.0"
   }
 }
